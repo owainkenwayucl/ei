@@ -125,17 +125,17 @@ def output_bash_smart(diff, old_env):
 
     print('\n# New variables')
 # Export new variables
-    for a in diff['new']:
+    for a in sorted(diff['new'].keys()):
         print('export ' + a + '=' + diff['new'][a])
 
     print('\n# Deleted variables')
 # Delete old ones
-    for a in diff['deleted']:
+    for a in sorted(diff['deleted'].keys()):
         print('unset ' + a)
 
     print('\n# Modified variables')
 # Update modified ones
-    for a in diff['modified']:
+    for a in sorted(diff['modified'].keys()):
         value = diff['modified'][a]
         old_value = old_env[a]
         value = value.replace(old_value, ('$'+ a))
