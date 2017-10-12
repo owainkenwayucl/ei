@@ -118,6 +118,30 @@ def output_bash(diff):
     for a in diff['modified']:
         print('export ' + a + '=' + diff['modified'][a])
 
+# Convert our dict of differences into bash
+def output_bash_smart(diff, old_env):
+
+    print('#!/usr/bin/env bash')
+
+    print('\n# New variables')
+# Export new variables
+    for a in diff['new']:
+        print('export ' + a + '=' + diff['new'][a])
+
+    print('\n# Deleted variables')
+# Delete old ones
+    for a in diff['deleted']:
+        print('unset ' + a)
+
+    print('\n# Modified variables')
+# Update modified ones
+    for a in diff['modified']:
+        value = diff['modified'][a]
+        old_value = old_env[a]
+        value = value.replace(old_value, ('$'+ a))
+
+        print('export ' + a + '=' + value)
+
 # In lieu of a main function in python...
 if __name__ == '__main__':
     import argparse
@@ -127,7 +151,7 @@ if __name__ == '__main__':
     parser.add_argument('-f', metavar='filename', type=str, help='file')
     parser.add_argument('-a', metavar='action', type=str, help='save|compare')
     parser.add_argument('-o', action='store_true', help='overwrite')
-    parser.add_argument('-m', metavar='mode', type=str, help='set mode from: dict|bash')
+    parser.add_argument('-m', metavar='mode', type=str, help='set mode from: dict|bash|bash_smart')
 
     args = parser.parse_args()
 
@@ -146,6 +170,8 @@ if __name__ == '__main__':
         if (args.m != None):
             if (args.m.lower() == 'bash'):
                 output_bash(diff)
+            elif (args.m.lower() == 'bash_smart'):
+                output_bash_smart(diff, load_environ(args.f))
             elif (args.m.lower() == 'dict'):
                 print(diff)
             else:
