@@ -97,6 +97,27 @@ def load_environ(filename):
 
     return old_environment
 
+
+# Convert our dict of differences into bash
+def output_bash(diff):
+
+    print('#!/usr/bin/env bash')
+
+    print('\n# New variables')
+# Export new variables
+    for a in diff['new']:
+        print('export ' + a + '=' + diff['new'][a])
+
+    print('\n# Deleted variables')
+# Delete old ones
+    for a in diff['deleted']:
+        print('unset ' + a)
+
+    print('\n# Modified variables')
+# Update modified ones
+    for a in diff['modified']:
+        print('export ' + a + '=' + diff['modified'][a])
+
 # In lieu of a main function in python...
 if __name__ == '__main__':
     import argparse
@@ -106,6 +127,7 @@ if __name__ == '__main__':
     parser.add_argument('-f', metavar='filename', type=str, help='file')
     parser.add_argument('-a', metavar='action', type=str, help='save|compare')
     parser.add_argument('-o', action='store_true', help='overwrite')
+    parser.add_argument('-m', metavar='mode', type=str, help='set mode from: dict|bash')
 
     args = parser.parse_args()
 
@@ -118,10 +140,19 @@ if __name__ == '__main__':
         sys.exit(1)
 
     if (args.a.lower() == 'save'):
-        record_environment(args.f, args.d)
+        record_environment(args.f, args.o)
     elif (args.a.lower() == 'compare'):
         diff = compare_environment(load_environ(args.f), extract_environment())
-        print(diff)
+        if (args.m != None):
+            if (args.m.lower() == 'bash'):
+                output_bash(diff)
+            elif (args.m.lower() == 'dict'):
+                print(diff)
+            else:
+                print('Error - invalid mode: ' + args.m.lower())
+                sys.exit(4)
+        else:
+            print(diff)
     else:
         print('Error - invalid action: ' + args.a.lower())
         sys.exit(3)
