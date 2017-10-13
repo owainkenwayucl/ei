@@ -38,9 +38,9 @@ e.g.
 
 ```none
 $ env > old_environment.txt
-
- <... source the .sh files that change the environment ...>
- 
+```
+*(source the .sh files that change the environment)*
+```none
 $ env > new_environment.txt
 $ module load python/3.6.3
 $ python3 ei.py -a forensic -f old_environment.txt -n new_environment.txt -m bash_smart
