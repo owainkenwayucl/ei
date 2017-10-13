@@ -29,3 +29,15 @@ This will print out a python dictionary with the differences.  More usefully you
 | `dict`       | prints a python dict (default)                                                                                       |
 | `bash`       | prints a script that will change from the old to new environment.                                                    |                     
 | `bash_smart` | as `bash` but attempts to base modified enviroment variables on the orginal ones (`export PATH=/usr/bin:$PATH` etc.) |
+
+## When Python 3 gets in the way
+
+Unfortunately sometimes you want to inspect environmental changes when having one of our Python 3 modules loaded will get in the way.  To fix this, you can save the two environments to two different text files with `env > somefilename` and then use forensic mode to compare them.
+
+e.g.
+
+```none
+$ python3 ei.py -a forensic -f old_environment.txt -n new_environment.txt -m bash_smart
+```
+
+This will generate a `bash` script that takes the environment from the one in `old_environment.txt` to the one in `new_environment.txt`.
