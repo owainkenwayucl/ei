@@ -28,7 +28,7 @@ This will print out a python dictionary with the differences.  More usefully you
 |--------------|----------------------------------------------------------------------------------------------------------------------|
 | `dict`       | prints a python dict (default)                                                                                       |
 | `bash`       | prints a script that will change from the old to new environment.                                                    |                     
-| `bash_smart` | as `bash` but attempts to base modified enviroment variables on the orginal ones (`export PATH=/usr/bin:$PATH` etc.) |
+| `bash_smart` | as `bash` but attempts to base modified enviroment variables on the original ones (`export PATH=/usr/bin:$PATH` etc.) |
 
 ## When Python 3 gets in the way
 
