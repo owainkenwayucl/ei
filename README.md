@@ -24,11 +24,13 @@ $ python3 ei.py -a compare -f old.env
 
 This will print out a python dictionary with the differences.  More usefully you can use the `-m` flag to get more usable outputs.
 
-| mode         | function                                                                                                              |
-|--------------|-----------------------------------------------------------------------------------------------------------------------|
-| `dict`       | prints a python dict (default)                                                                                        |
-| `bash`       | prints a script that will change from the old to new environment.                                                     |                     
-| `bash_smart` | as `bash` but attempts to base modified enviroment variables on the original ones (`export PATH=/usr/bin:$PATH` etc.) |
+| mode           | function                                                                                                              |
+|----------------|-----------------------------------------------------------------------------------------------------------------------|
+| `dict`         | prints a python dict (default)                                                                                        |
+| `bash`         | prints a script that will change from the old to new environment.                                                     |                     
+| `bash_smart`   | as `bash` but attempts to base modified enviroment variables on the original ones (`export PATH=/usr/bin:$PATH` etc.) |
+| `module`       | outputs in a format compatible with Environment Modules                                                               |                     
+| `module_smart` | as `module` but attempts to base modified enviroment variables on the original ones.                                  |
 
 ## When Python 3 gets in the way
 
