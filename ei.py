@@ -239,9 +239,22 @@ def output_module_smart(diff, old_env):
     for a in sorted(diff['modified'].keys()):
         value = diff['modified'][a]
         old_value = old_env[a]
-        value = value.replace(old_value, ('$'+ a))
 
-        print('setenv ' + a + ' ' + value)
+        c = value.count(old_value)
+        if c == 1:
+# Try to use append/prepend path
+            if value.startswith(old_value + ":"):
+                print('append-path ' + a + ' ' + value.replace((old_value + ":"), ''))
+            elif value.endswith(":" + old_value):
+                print('prepend-path ' + a + ' ' + value.replace((":" + old_value), ''))
+            elif (':' + old_value + ':') in value:
+                temp = value.split(':' + old_value + ':')
+                print('prepend-path ' + a + ' ' + temp[0])
+                print('append-path ' + a + ' ' + temp[1])
+            else:
+                print('setenv ' + a + ' ' + diff['modified'][a])               
+        else: 
+            print('setenv ' + a + ' ' + diff['modified'][a])
 
 '''
    In lieu of a main function in python...
