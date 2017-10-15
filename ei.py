@@ -200,6 +200,50 @@ def output_bash_smart(diff, old_env):
         print('export ' + a + '=' + value)
 
 '''
+   Convert our dict of differences into module tcl
+'''
+def output_module(diff):
+
+    print('\n# New variables')
+# Export new variables
+    for a in diff['new']:
+        print('setenv ' + a + ' ' + diff['new'][a])
+
+    print('\n# Deleted variables')
+# Delete old ones
+    for a in diff['deleted']:
+        print('unset ' + a)
+
+    print('\n# Modified variables')
+# Update modified ones
+    for a in diff['modified']:
+        print('setenv ' + a + ' ' + diff['modified'][a])
+
+'''
+   Convert our dict of differences into module tcl
+'''
+def output_module_smart(diff, old_env):
+
+    print('\n# New variables')
+# Export new variables
+    for a in sorted(diff['new'].keys()):
+        print('setenv ' + a + ' ' + diff['new'][a])
+
+    print('\n# Deleted variables')
+# Delete old ones
+    for a in sorted(diff['deleted'].keys()):
+        print('unset ' + a)
+
+    print('\n# Modified variables')
+# Update modified ones
+    for a in sorted(diff['modified'].keys()):
+        value = diff['modified'][a]
+        old_value = old_env[a]
+        value = value.replace(old_value, ('$'+ a))
+
+        print('setenv ' + a + ' ' + value)
+
+'''
    In lieu of a main function in python...
 '''
 if __name__ == '__main__':
@@ -210,7 +254,7 @@ if __name__ == '__main__':
     parser.add_argument('-f', metavar='filename', type=str, help='file')
     parser.add_argument('-a', metavar='action', type=str, help='save|compare|forensic')
     parser.add_argument('-o', action='store_true', help='overwrite')
-    parser.add_argument('-m', metavar='mode', type=str, help='set mode from: dict|bash|bash_smart')
+    parser.add_argument('-m', metavar='mode', type=str, help='set mode from: dict|bash|bash_smart|module|module_smart')
     parser.add_argument('-n', metavar='newfile', type=str, help='new environment file')
 
     args = parser.parse_args()
@@ -236,7 +280,11 @@ if __name__ == '__main__':
             if (args.m.lower() == 'bash'):
                 output_bash(diff)
             elif (args.m.lower() == 'bash_smart'):
-                output_bash_smart(diff, new_environment)
+                output_bash_smart(diff, old_environment)
+            elif (args.m.lower() == 'module'):
+                output_module(diff)
+            elif (args.m.lower() == 'module_smart'):
+                output_module_smart(diff, old_environment)                
             elif (args.m.lower() == 'dict'):
                 print(diff)
             else:
@@ -256,7 +304,11 @@ if __name__ == '__main__':
             if (args.m.lower() == 'bash'):
                 output_bash(diff)
             elif (args.m.lower() == 'bash_smart'):
-                output_bash_smart(diff, new_environment)
+                output_bash_smart(diff, old_environment)
+            elif (args.m.lower() == 'module'):
+                output_module(diff)
+            elif (args.m.lower() == 'module_smart'):
+                output_module_smart(diff, old_environment)
             elif (args.m.lower() == 'dict'):
                 print(diff)
             else:
