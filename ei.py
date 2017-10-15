@@ -17,7 +17,20 @@ def extract_environment():
     for a in os.environ:
         r[a] = os.environ[a]
 
+    clean_environment(r)
     return r
+
+'''
+   Clean out unhelpful environment entries (like PWD)
+'''
+def clean_environment(environment):
+    bad = ['PWD', 'OLDPWD']
+
+    for a in bad:
+        if a in environment:
+            environment.pop(a)
+
+
 
 '''
    Function to record the current environment into a file.
@@ -103,6 +116,7 @@ def load_environ(filename):
 # close our file
     f.close()
 
+    clean_environment(old_environment)
     return old_environment
 
 '''
@@ -134,6 +148,7 @@ def forensic_load(filename):
 # close our file
     f.close()    
 
+    clean_environment(e)
     return e
 
 '''
