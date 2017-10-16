@@ -212,7 +212,7 @@ def output_module(diff):
     print('\n# Deleted variables')
 # Delete old ones
     for a in diff['deleted']:
-        print('unset ' + a)
+        print('unsetenv ' + a)
 
     print('\n# Modified variables')
 # Update modified ones
@@ -232,7 +232,7 @@ def output_module_smart(diff, old_env):
     print('\n# Deleted variables')
 # Delete old ones
     for a in sorted(diff['deleted'].keys()):
-        print('unset ' + a)
+        print('unsetenv ' + a)
 
     print('\n# Modified variables')
 # Update modified ones
