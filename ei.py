@@ -244,13 +244,41 @@ def output_module_smart(diff, old_env):
         if c == 1:
 # Try to use append/prepend path
             if value.startswith(old_value + ":"):
-                print('append-path ' + a + ' ' + value.replace((old_value + ":"), ''))
+                outvalue = value.replace((old_value + ":"), '')
+                if ":" in outvalue:
+                    paths = outvalue.split(":")
+                    for q in paths:
+                        print('append-path ' + a + ' ' + q)
+                else:
+                    print('append-path ' + a + ' ' + outvalue)
             elif value.endswith(":" + old_value):
-                print('prepend-path ' + a + ' ' + value.replace((":" + old_value), ''))
+                outvalue = value.replace((":" + old_value), '')
+                if ":" in outvalue:
+                    paths = outvalue.split(":")
+                    paths.reverse()
+                    for q in paths:
+                        print('prepend-path ' + a + ' ' + q)
+                else:
+                    print('prepend-path ' + a + ' ' + outvalue)
             elif (':' + old_value + ':') in value:
+# Split into before and after old value
                 temp = value.split(':' + old_value + ':')
-                print('prepend-path ' + a + ' ' + temp[0])
-                print('append-path ' + a + ' ' + temp[1])
+                outvalue = temp[0]
+                if ":" in outvalue:
+                    paths = outvalue.split(":")
+                    paths.reverse()
+                    for q in paths:
+                        print('prepend-path ' + a + ' ' + q)
+                else:
+                    print('prepend-path ' + a + ' ' + outvalue)
+                outvalue = temp[1]
+                if ":" in outvalue:
+                    paths = outvalue.split(":")
+                    for q in paths:
+                        print('append-path ' + a + ' ' + q)
+                else:
+                    print('append-path ' + a + ' ' + outvalue)
+
             else:
                 print('setenv ' + a + ' ' + diff['modified'][a])               
         else: 
