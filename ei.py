@@ -219,6 +219,23 @@ def output_module(diff):
     for a in diff['modified']:
         print('setenv ' + a + ' ' + diff['modified'][a])
 
+
+'''
+   append-path
+'''
+def append_path(path, a):
+    print('append-path' + path + ' ' + a)
+
+
+'''
+   prepend-path
+'''
+def prepend_path(path, p):
+    print('prepend-path' + path + ' ' + p)
+
+
+
+
 '''
    Convert our dict of differences into module tcl
 '''
@@ -248,18 +265,18 @@ def output_module_smart(diff, old_env):
                 if ":" in outvalue:
                     paths = outvalue.split(":")
                     for q in paths:
-                        print('append-path ' + a + ' ' + q)
+                        append_path(a, q)
                 else:
-                    print('append-path ' + a + ' ' + outvalue)
+                    append_path(a, outvalue)
             elif value.endswith(":" + old_value):
                 outvalue = value.replace((":" + old_value), '')
                 if ":" in outvalue:
                     paths = outvalue.split(":")
                     paths.reverse()
                     for q in paths:
-                        print('prepend-path ' + a + ' ' + q)
+                        prepend_path(a, q)
                 else:
-                    print('prepend-path ' + a + ' ' + outvalue)
+                    prepend_path(a, outvalue)
             elif (':' + old_value + ':') in value:
 # Split into before and after old value
                 temp = value.split(':' + old_value + ':')
@@ -268,16 +285,16 @@ def output_module_smart(diff, old_env):
                     paths = outvalue.split(":")
                     paths.reverse()
                     for q in paths:
-                        print('prepend-path ' + a + ' ' + q)
+                        prepend_path(a, q)
                 else:
-                    print('prepend-path ' + a + ' ' + outvalue)
+                    prepend_path(a, outvalue)
                 outvalue = temp[1]
                 if ":" in outvalue:
                     paths = outvalue.split(":")
                     for q in paths:
-                        print('append-path ' + a + ' ' + q)
+                        append_path(a, q)
                 else:
-                    print('append-path ' + a + ' ' + outvalue)
+                    append_path(a, outvalue)
 
             else:
                 print('setenv ' + a + ' ' + diff['modified'][a])               
