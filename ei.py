@@ -233,8 +233,22 @@ def append_path(path, a):
 def prepend_path(path, p):
     print('prepend-path' + path + ' ' + p)
 
+'''
+   Split and prepend-paths
+'''
+def split_and_prepend(path, p):
+    paths = p.split(":")
+    paths.reverse()
+    for q in paths:
+        prepend_path(path, q)
 
-
+'''
+   Split and append-paths
+'''
+def split_and_append(path, a):
+    paths = a.split(":")
+    for q in paths:
+        append_path(path, q)
 
 '''
    Convert our dict of differences into module tcl
@@ -263,18 +277,13 @@ def output_module_smart(diff, old_env):
             if value.startswith(old_value + ":"):
                 outvalue = value.replace((old_value + ":"), '')
                 if ":" in outvalue:
-                    paths = outvalue.split(":")
-                    for q in paths:
-                        append_path(a, q)
+                    split_and_append(a, outvalue)
                 else:
                     append_path(a, outvalue)
             elif value.endswith(":" + old_value):
                 outvalue = value.replace((":" + old_value), '')
                 if ":" in outvalue:
-                    paths = outvalue.split(":")
-                    paths.reverse()
-                    for q in paths:
-                        prepend_path(a, q)
+                    split_and_prepend(a, outvalue)
                 else:
                     prepend_path(a, outvalue)
             elif (':' + old_value + ':') in value:
@@ -282,17 +291,12 @@ def output_module_smart(diff, old_env):
                 temp = value.split(':' + old_value + ':')
                 outvalue = temp[0]
                 if ":" in outvalue:
-                    paths = outvalue.split(":")
-                    paths.reverse()
-                    for q in paths:
-                        prepend_path(a, q)
+                    split_and_prepend(a, outvalue)
                 else:
                     prepend_path(a, outvalue)
                 outvalue = temp[1]
                 if ":" in outvalue:
-                    paths = outvalue.split(":")
-                    for q in paths:
-                        append_path(a, q)
+                    split_and_prepend(a, outvalue)
                 else:
                     append_path(a, outvalue)
 
