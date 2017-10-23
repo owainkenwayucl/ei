@@ -219,13 +219,11 @@ def output_module(diff):
     for a in diff['modified']:
         print('setenv ' + a + ' ' + diff['modified'][a])
 
-
 '''
    append-path
 '''
 def append_path(path, a):
     print('append-path' + path + ' ' + a)
-
 
 '''
    prepend-path
